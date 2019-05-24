@@ -28,4 +28,12 @@ COPY --from=builder /go/bin/nextcloud-exporter /bin/nextcloud-exporter
 USER nobody
 EXPOSE 9205
 
-ENTRYPOINT ["/bin/nextcloud-exporter"]
+### Changes for TechnoCore belowe here.
+
+## Set up the CMD as well as the pre and post hooks.
+COPY go-init /bin/go-init
+COPY entrypoint.sh /entrypoint.sh
+COPY exitpoint.sh /exitpoint.sh
+
+ENTRYPOINT ["go-init"]
+CMD ["-main", "/entrypoint.sh", "-post", "/exitpoint.sh"]
